@@ -40,9 +40,11 @@ This folder holds the configuration files and in future will hold a few template
 
 ###includes
 This folders holds the core of Hemingway
+
 * email_modules.py - ***As it says. This module will manage, build and send the emails.***
 * when_things_go_south.py - ***Error handler. A big pile of mess. ***
 ###sample_conf
+
 * addresses.csv - ***the address list as described earlier. ***
 * body.html - ***the mail HTML body. this one will be parsed for the images attached. ***
 * body.txt - ***the alternative text body ***
@@ -52,6 +54,9 @@ This folders holds the core of Hemingway
 - [ ] Add support for mail server authentication.
 - [ ] Add simpler HTML interface.
 - [ ] Comprehensive support for logging and summery.
+- [ ] Add SET loader for classical phishing campaigns. 
+- [ ] Add Metasploit browser_autopwn module loader for some more.
+- [ ] MSFCLI launcher for embedded exploits in file
 
 ##License (GPLv3)
 Hemingway - A Phishing Campaign Helper
