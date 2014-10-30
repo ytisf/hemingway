@@ -4,30 +4,40 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <title>Hemingway by ytisf</title>
-
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
     <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
   </head>
   <body>
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/ytisf/hemingway">View On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/ytisf/hemingway/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/ytisf/hemingway/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
+
     <div class="wrapper">
-      <header>
-        <h1>Hemingway</h1>
-        <p>hemingway is a simple and easy to use spear phishing helper</p>
 
-        <p class="view"><a href="https://github.com/ytisf/hemingway">View the Project on GitHub <small>ytisf/hemingway</small></a></p>
-
-
-        <ul>
-          <li><a href="https://github.com/ytisf/hemingway/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/ytisf/hemingway/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/ytisf/hemingway">View On <strong>GitHub</strong></a></li>
-        </ul>
-      </header>
       <section>
+        <div id="title">
+          <h1>Hemingway</h1>
+          <p>hemingway is a simple and easy to use spear phishing helper</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/ytisf">ytisf</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
+        </div>
+
         <h2>
 <a name="introduction" class="anchor" href="#introduction"><span class="octicon octicon-link"></span></a>Introduction</h2>
 
@@ -83,10 +93,13 @@ When you are creating you HTML body please remember that each image you embed wi
 <ul>
 <li>email_modules.py - <strong><em>As it says. This module will manage, build and send the emails.</em></strong>
 </li>
-<li>when_things_go_south.py - <em>**Error handler. A big pile of mess. **</em>
-###sample_conf</li>
-<li>addresses.csv - <em>**the address list as described earlier. **</em>
+<li>
+<p>when_things_go_south.py - <em>**Error handler. A big pile of mess. **</em></p>
+
+<h3>
+<a name="sample_conf" class="anchor" href="#sample_conf"><span class="octicon octicon-link"></span></a>sample_conf</h3>
 </li>
+<li><p>addresses.csv - <em>**the address list as described earlier. **</em></p></li>
 <li>body.html - <em>**the mail HTML body. this one will be parsed for the images attached. **</em>
 </li>
 <li>body.txt - <em>**the alternative text body **</em>
@@ -102,6 +115,9 @@ When you are creating you HTML body please remember that each image you embed wi
 <li>[ ] Add support for mail server authentication.</li>
 <li>[ ] Add simpler HTML interface.</li>
 <li>[ ] Comprehensive support for logging and summery.</li>
+<li>[ ] Add SET loader for classical phishing campaigns. </li>
+<li>[ ] Add Metasploit browser_autopwn module loader for some more.</li>
+<li>[ ] MSFCLI launcher for embedded exploits in file</li>
 </ul>
 
 <h2>
@@ -123,12 +139,9 @@ GNU General Public License for more details.</p>
 <p>You should have received a copy of the GNU General Public License
 along with this program.  If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.</p>
       </section>
-      <footer>
-        <p>This project is maintained by <a href="https://github.com/ytisf">ytisf</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
-      </footer>
+
     </div>
-    <script src="javascripts/scale.fix.js"></script>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
               <script type="text/javascript">
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
             document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
