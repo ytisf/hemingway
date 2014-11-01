@@ -10,12 +10,18 @@ import includes.when_things_go_south
 
 
 class MailModule():
-	"""
-	Tיhis is the main module that is responsible for all the email handeling
-	It parses the CSV and goes even to the sending of the email and the attaching
-	of the images to the HTML body.
-	"""
-	def __init__(self, server, port):
+	def __init__(self, server, port, auth, username, password):
+		"""
+		Tיhis is the main module that is responsible for all the email handeling
+		It parses the CSV and goes even to the sending of the email and the attaching
+		of the images to the HTML body.
+		:param server: The server address, IP or DNS
+		:param port: Port for connection
+		:param auth: Boolean of using authentication
+		:param username: SMTP username
+		:param password: SMTP password
+		:return: returns nothing
+		"""
 		class Object(object):
 			"""
 			General object class to be used later
@@ -29,6 +35,10 @@ class MailModule():
 		self._mailserver = Object()
 		self._mailserver_server = server
 		self._mailserver_port = port
+		if auth == 1:
+			self._mailserver_username = username
+			self._mailserver_password = password
+			self._mailserver_auth = auth
 		self._folder = "sample_conf/"
 		self._i = 0                     # counter for retrying
 		self._j = 2                     # how many times to try
@@ -120,6 +130,18 @@ class MailModule():
 			self._error_handler.log_error(0, "Connected to SMTP server successfully")
 		except smtplib.SMTPConnectError:
 			self._error_handler.log_error(3, "Could not connect to mail server: %s" % self._mailserver_server)
+
+
+		# Will be checking if AUTH data were given and try to authenticate prior to each mail
+		if self._mailserver_auth == 1:
+			try:
+				s.helo("Hemmingway")
+				s.login(self._mailserver_username, self._mailserver_password)
+			except smtplib.SMTPAuthenticationError:
+				self._error_handler.log_error(3, "Credentials provided to SMTP server are invalid")
+			except:
+				self._error_handler.log_error(3, "Unknown authentication error to server")
+
 		try:
 			s.sendmail(from_email, rcpt_email, msg.as_string())
 			self._error_handler.log_error(0, "[" + str(counter) + "/" + str(total_len) + "] Mail sent from " + from_email + " to " + rcpt_email)

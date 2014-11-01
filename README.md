@@ -51,7 +51,7 @@ This folders holds the core of Hemingway
 * url.jpg - ***an in-body image just for an example ***
 
 ##Future Change Log
-- [ ] Add support for mail server authentication.
+- [X] Add support for mail server authentication.
 - [ ] Add simpler HTML interface.
 - [ ] Comprehensive support for logging and summery.
 - [ ] Add SET loader for classical phishing campaigns. 

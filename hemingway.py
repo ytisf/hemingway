@@ -80,6 +80,8 @@ def print_me():
 
 def main(argv):
 
+	server_auth = 0
+
 	try:
 		opts, args = getopt.getopt(argv, "h:v", ["help", "version"])
 	except getopt.GetoptError:
@@ -115,9 +117,17 @@ def main(argv):
 		attachment_list = config.get('phish', 'attachments')
 	except ConfigParser, e:
 		error_handler.log_error(3, "Something is wrong when parsing configuration file.\nTechnical Log:\n " + str(e))
+
+	# Try to import server authentication, if there are configurations for that
+	try:
+		SMTPusername = config.get('server','username')
+		SMTPpassword = config.get('server', 'password')
+		server_auth = 1
+	except:
+		server_auth = 0
 	''' Finished Parsing Conf File '''
 
-	mail_handler = includes.email_modules.MailModule(server_name, server_port)            # Mail Handler
+	mail_handler = includes.email_modules.MailModule(server_name, server_port, server_auth, SMTPusername, SMTPpassword)            # Mail Handler
 
 	address_array = mail_handler.parse_csv(address_list_file)
 
