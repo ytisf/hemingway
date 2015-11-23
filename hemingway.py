@@ -120,10 +120,12 @@ def main(argv):
 
 	# Try to import server authentication, if there are configurations for that
 	try:
-		SMTPusername = config.get('server','username')
+		SMTPusername = config.get('server', 'username')
 		SMTPpassword = config.get('server', 'password')
 		server_auth = 1
 	except:
+		SMTPusername = ""
+		SMTPpassword = ""
 		server_auth = 0
 	''' Finished Parsing Conf File '''
 
@@ -143,7 +145,7 @@ def main(argv):
 	i = 0
 	for from_mail, to_mail in address_array:
 		mail_handler.send_email(from_mail, to_mail, subject, html_body, txt_body, attachment_list, i, amount_to_send)
-		i+=1
+		i += 1
 
 
 if __name__ == "__main__":

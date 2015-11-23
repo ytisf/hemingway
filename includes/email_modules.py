@@ -134,20 +134,20 @@ class MailModule():
 
 		# Will be checking if AUTH data were given and try to authenticate prior to each mail
 		if self._mailserver_auth == 1:
-			try:
+			if self._mailserver_username == "":
 				s.helo("Hemmingway")
-				s.login(self._mailserver_username, self._mailserver_password)
-			except smtplib.SMTPAuthenticationError:
-				self._error_handler.log_error(3, "Credentials provided to SMTP server are invalid")
-			except:
-				self._error_handler.log_error(3, "Unknown authentication error to server")
+			else:
+				try:
+					s.helo("Hemmingway")
+					s.login(self._mailserver_username, self._mailserver_password)
+				except smtplib.SMTPAuthenticationError:
+					self._error_handler.log_error(3, "Credentials provided to SMTP server are invalid")
+				except:
+					self._error_handler.log_error(3, "Unknown authentication error to server")
 
 		try:
 			s.sendmail(from_email, rcpt_email, msg.as_string())
 			self._error_handler.log_error(0, "[" + str(counter) + "/" + str(total_len) + "] Mail sent from " + from_email + " to " + rcpt_email)
 		except:
 			self._error_handler.log_error(2, "[" + str(counter) + "/" + str(total_len) + "] Mail sending failed from " + from_email + " to " + rcpt_email)
-			# self._error_handler.log_error(2, "Trying one more time...")
-			# self._i += 1
-			# self.send_email(from_email, rcpt_email, subject, html_body, text_body, attachments)
 		s.quit()
