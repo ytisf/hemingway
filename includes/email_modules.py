@@ -75,7 +75,7 @@ class MailModule():
 			self._i = 1
 			return 0
 
-		self._error_handler.log_error(0, "Building mail")
+		# self._error_handler.log_error(0, "Building mail")
 		msg = MIMEMultipart('related')
 		msg['Subject'] = subject
 		msg['From'] = from_email
@@ -147,7 +147,7 @@ class MailModule():
 
 		try:
 			s.sendmail(from_email, rcpt_email, msg.as_string())
-			self._error_handler.log_error(0, "[" + str(counter) + "/" + str(total_len) + "] Mail sent from " + from_email + " to " + rcpt_email)
+			self._error_handler.log_error(0, "[" + str(counter) + "/" + str(total_len-1) + "] Mail sent from " + from_email + " to " + rcpt_email)
 		except:
-			self._error_handler.log_error(2, "[" + str(counter) + "/" + str(total_len) + "] Mail sending failed from " + from_email + " to " + rcpt_email)
+			self._error_handler.log_error(2, "[" + str(counter) + "/" + str(total_len-1) + "] Mail sending failed from " + from_email + " to " + rcpt_email)
 		s.quit()
