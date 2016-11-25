@@ -2,6 +2,7 @@
 
 import sys
 import getopt
+import threading
 import ConfigParser
 
 import includes.email_modules
@@ -140,13 +141,14 @@ def main(argv):
 	txt_body = txt_file_handler.read()
 
 	attachment_list = attachment_list.split(', ')
+	if len(attachment_list) is 0:
+		attachment_list = []
 
 	amount_to_send = len(address_array)
 	i = 0
 	for from_mail, to_mail in address_array:
 		mail_handler.send_email(from_mail, to_mail, subject, html_body, txt_body, attachment_list, i, amount_to_send)
 		i += 1
-
 
 if __name__ == "__main__":
 	main(sys.argv[1:])

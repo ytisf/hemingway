@@ -39,6 +39,9 @@ class MailModule():
 			self._mailserver_username = username
 			self._mailserver_password = password
 			self._mailserver_auth = auth
+		else:
+			self._mailserver_auth = 0
+
 		self._folder = "sample_conf/"
 		self._i = 0                     # counter for retrying
 		self._j = 2                     # how many times to try
@@ -116,11 +119,15 @@ class MailModule():
 
 		# Start with attachments:
 		if attachments:
-			for fi in attachments:
-				f = file(fi)
-				attachment = MIMEText(f.read())
-				attachment.add_header('Content-Disposition', 'attachment', filename=fi)
-				msg.attach(attachment)
+			if attachments is not ['']:
+					for fi in attachments:
+						try:
+							f = file(fi)
+							attachment = MIMEText(f.read())
+							attachment.add_header('Content-Disposition', 'attachment', filename=fi)
+							msg.attach(attachment)
+						except:
+							pass
 		# End with Attachments
 
 
