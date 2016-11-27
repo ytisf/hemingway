@@ -6,7 +6,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.image import MIMEImage
 
-import includes.when_things_go_south
+import lib.when_things_go_south
 
 
 class MailModule():
@@ -29,7 +29,7 @@ class MailModule():
 			def __init__(self):
 				pass
 
-		self._error_handler = includes.when_things_go_south.Error_Handler()       # Error event handler
+		self._error_handler = lib.when_things_go_south.Error_Handler()       # Error event handler
 
 		# Build mail server options
 		self._mailserver = Object()
@@ -133,10 +133,13 @@ class MailModule():
 
 		# Sending email!
 		try:
-			s = smtplib.SMTP(str(self._mailserver_server))
+			s = smtplib.SMTP(str(self._mailserver_server), timeout=5)
 			self._error_handler.log_error(0, "Connected to SMTP server successfully")
 		except smtplib.SMTPConnectError:
 			self._error_handler.log_error(3, "Could not connect to mail server: %s" % self._mailserver_server)
+		except:
+			self._error_handler.log_error(3, "Could not connect to mail server: %s. Operation timedout." % self._mailserver_server)
+			return 1
 
 
 		# Will be checking if AUTH data were given and try to authenticate prior to each mail
@@ -155,6 +158,7 @@ class MailModule():
 		try:
 			s.sendmail(from_email, rcpt_email, msg.as_string())
 			self._error_handler.log_error(0, "[" + str(counter) + "/" + str(total_len-1) + "] Mail sent from " + from_email + " to " + rcpt_email)
+			s.quit()
 		except:
 			self._error_handler.log_error(2, "[" + str(counter) + "/" + str(total_len-1) + "] Mail sending failed from " + from_email + " to " + rcpt_email)
-		s.quit()
+			return 1

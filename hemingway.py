@@ -1,12 +1,13 @@
 #!/usr/bin/python
 
 import sys
+import time
 import getopt
 import threading
 import ConfigParser
 
-import includes.email_modules
-import includes.when_things_go_south
+import lib.email_modules
+import lib.when_things_go_south
 
 __author__ = "Yuval tisf Nativ"
 __license__ = "GPLv3"
@@ -79,6 +80,14 @@ def print_me():
 	print("\t\tby " + __author__ + " to asnorth\n\n")
 
 
+def _countActiveThreads(threads):
+	active = 0
+	for t in threads:
+		if t.isAlive():
+			active += 1
+	return active
+
+
 def main(argv):
 
 	server_auth = 0
@@ -97,7 +106,7 @@ def main(argv):
 			print("Go read the README.md!")
 			sys.exit(1)
 
-	error_handler = includes.when_things_go_south.Error_Handler()       # Error event handler
+	error_handler = lib.when_things_go_south.Error_Handler()       # Error event handler
 
 	# Change default location of conf file!
 	conf_file = "confs/example.conf"
@@ -111,6 +120,7 @@ def main(argv):
 	try:
 		server_name = config.get('server', 'address')
 		server_port = config.getint('server', 'port')
+		max_connections = config.getint('server', 'max_connections')
 		address_list_file = config.get('phish', 'addresses_csv')
 		htmlbody_file = config.get('phish', 'html_body')
 		txtbody_file = config.get('phish', 'txt_body')
@@ -130,25 +140,56 @@ def main(argv):
 		server_auth = 0
 	''' Finished Parsing Conf File '''
 
-	mail_handler = includes.email_modules.MailModule(server_name, server_port, server_auth, SMTPusername, SMTPpassword)            # Mail Handler
+	""" Read Bodies """
+	try:
+		f = open(htmlbody_file, 'rb')
+		html_body = f.read()
+		f.close()
 
-	address_array = mail_handler.parse_csv(address_list_file)
+		f = open(txtbody_file, 'rb')
+		txt_body = f.read()
+		f.close()
+	except IOError, e:
+		error_handler.log_error(3, "Error reading one of the body files in the configuration file.")
+		error_handler.log_error(3, e)
+		sys.exit(1)
+	""" End Reading Bodies """
 
-	html_file_handler = open(htmlbody_file, 'rb')
-	html_body = html_file_handler.read()
 
-	txt_file_handler = open(txtbody_file, 'rb')
-	txt_body = txt_file_handler.read()
-
-	attachment_list = attachment_list.split(', ')
+	# Mail Handler
+	mail_handler = lib.email_modules.MailModule(server_name, server_port, server_auth, SMTPusername, SMTPpassword)
+	address_array = mail_handler.parse_csv(address_list_file)	# Parse attachment file
+	amount_to_send = len(address_array)							# Amount of emails to send
+	attachment_list = attachment_list.split(', ')				# Get Attachments
 	if len(attachment_list) is 0:
 		attachment_list = []
 
-	amount_to_send = len(address_array)
 	i = 0
+	all_threads = []
 	for from_mail, to_mail in address_array:
-		mail_handler.send_email(from_mail, to_mail, subject, html_body, txt_body, attachment_list, i, amount_to_send)
+		count = _countActiveThreads(all_threads)
+		if count >= max_connections:
+			time.sleep(5)
+
+		error_handler.log_error(0, "Sending email %s-->%s." % (from_mail, to_mail))
+		th = threading.Thread(target=mail_handler.send_email, args=(from_mail, to_mail, subject, html_body, txt_body, attachment_list, i, amount_to_send))
+		th.start()
+		all_threads.append(th)
+		time.sleep(0.2)
 		i += 1
+
+	while True:
+
+		try:
+			count_threads = _countActiveThreads(all_threads)
+			if len(all_threads) == count_threads:
+				error_handler.log_error(0, "All threads finished.")
+				sys.exit(1)
+
+		except KeyboardInterrupt:
+			error_handler.log_error(3, "Got Keyboard Interrupt.")
+			sys.exit(1)
+
 
 if __name__ == "__main__":
 	main(sys.argv[1:])

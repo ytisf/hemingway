@@ -35,7 +35,8 @@ class Error_Handler():
 			sys.stderr.write(self.bcolors.FAIL + "[!] " + self.bcolors.ENDC + error + "\n")
 
 		elif id == 3:
-			sys.exit(self.bcolors.FAIL + "[X] " + self.bcolors.ENDC + error + "\n")
+			sys.stderr.write(self.bcolors.FAIL + "[!] " + self.bcolors.ENDC + error + "\n")
+			sys.exit(1)
 
 		else:
 			print("Go learn your error handler!!!!")

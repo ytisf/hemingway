@@ -1,4 +1,1 @@
-thi sis
-a
-text
-body
+This is just a text body.
